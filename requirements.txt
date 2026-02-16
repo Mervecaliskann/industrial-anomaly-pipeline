@@ -1,0 +1,7 @@
+numpy
+pandas
+torch
+openai
+python-dotenv
+streamlit
+matplotlib
