@@ -5,3 +5,6 @@ openai
 python-dotenv
 streamlit
 matplotlib
+fastapi
+uvicorn
+sqlalchemy

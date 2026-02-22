@@ -48,10 +48,26 @@ if st.button("🚀 Run AI Analysis"):
     
     if current_loss > 0.5: # Eşik değer
         st.error(f"🚨 ANOMALY DETECTED! (Loss Score: {current_loss:.4f})")
-        
+    
         reporter = MaintenanceReporter()
-        report = reporter.generate_report(test_data.iloc[-1])
+        last_values = test_data.iloc[-1]
+        report = reporter.generate_report(last_values)
         st.info("🤖 AI Diagnostic Report:")
         st.write(report)
-    else:
-        st.success(f"✅ System Healthy (Loss Score: {current_loss:.4f})")
+
+        # [EN] NEW: Save the result to the SQLite database via FastAPI logic
+        # [TR] YENİ: Sonucu FastAPI mantığı üzerinden SQLite veritabanına kaydet
+        from src.database import SessionLocal, AnomalyLog
+        
+        db = SessionLocal()
+        new_log = AnomalyLog(
+            temperature=float(last_values['temperature']),
+            vibration=float(last_values['vibration']),
+            pressure=float(last_values['pressure']),
+            loss_score=float(current_loss),
+            ai_report=report
+        )
+        db.add(new_log)
+        db.commit()
+        db.close()
+        st.success("💾 Anomaly saved to database!")
