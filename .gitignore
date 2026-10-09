@@ -2,4 +2,5 @@ venv/
 .env
 __pycache__/
 *.csv
-.ipynb_checkpoints/*.db
+.ipynb_checkpoints/
+*.db
